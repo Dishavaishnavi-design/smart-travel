@@ -16,8 +16,8 @@
             <a href="#home">Home</a>
             <a href="#destinations">Destinations</a>
             <a href="#hotels">Hotels & Restaurants</a>
-            <a href="#planner">Plan Trip</a>
-            <a href="#savedSection">Saved Itineraries (<span id="navSavedCount">0</span>)</a>
+            <a href="#planner" onclick="handleNavPlanTrip(event)">Plan Trip</a>
+            <a href="#savedSection" onclick="handleNavSavedItin(event)">Saved Itineraries (<span id="navSavedCount">0</span>)</a>
             <span id="welcomeMsg" class="welcome-msg"></span>
             <a href="/login.html" id="loginLink" class="nav-auth-btn">Login</a>
             <button id="logoutBtn" class="nav-logout-btn" onclick="logout()" style="display:none;">Logout</button>
@@ -167,7 +167,7 @@
         <div class="planner-card">
             <h2 class="planner-title">Plan Your Trip</h2>
 
-            <form id="tripPlannerForm" onsubmit="event.preventDefault(); generateItinerary();">
+            <form id="tripPlannerForm" onsubmit="event.preventDefault(); handlePlannerSubmit(event);">
                 <!-- Row 1: The Travel Route (Origin to Destination) -->
                 <div class="planner-row-route">
                     <div class="planner-field">

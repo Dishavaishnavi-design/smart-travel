@@ -85,7 +85,12 @@ async function handleLogin(event) {
         message.className = "auth-message success";
 
         setTimeout(function() {
-            window.location.href = "/index.html";
+            const pending = localStorage.getItem("pendingPlanDestination");
+            if (pending) {
+                window.location.href = "/index.html#planner";
+            } else {
+                window.location.href = "/index.html";
+            }
         }, 1000);
 
     } catch (error) {
@@ -152,7 +157,12 @@ async function handleRegister(event) {
         message.className = "auth-message success";
 
         setTimeout(function() {
-            window.location.href = "/index.html";
+            const pending = localStorage.getItem("pendingPlanDestination");
+            if (pending) {
+                window.location.href = "/index.html#planner";
+            } else {
+                window.location.href = "/index.html";
+            }
         }, 1000);
 
     } catch (error) {

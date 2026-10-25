@@ -31,6 +31,39 @@ function logout() {
     window.location.href = "/login.html";
 }
 
+function isLoggedIn() {
+    return !!(localStorage.getItem("token") && localStorage.getItem("userName"));
+}
+
+function handleNavPlanTrip(e) {
+    if (!isLoggedIn()) {
+        if (e) e.preventDefault();
+        window.location.href = "/login.html";
+        return;
+    }
+}
+
+function handleNavSavedItin(e) {
+    if (!isLoggedIn()) {
+        if (e) e.preventDefault();
+        window.location.href = "/login.html";
+        return;
+    }
+}
+
+function handlePlannerSubmit(e) {
+    if (e) e.preventDefault();
+    if (!isLoggedIn()) {
+        const destSelect = document.getElementById("planDestination");
+        if (destSelect && destSelect.value) {
+            localStorage.setItem("pendingPlanDestination", destSelect.value);
+        }
+        window.location.href = "/login.html";
+        return;
+    }
+    generateItinerary();
+}
+
 const defaultDestinations = [
     {
         name: "Taj Mahal",
@@ -156,6 +189,11 @@ function displayDestinations(list) {
         button.textContent = "Plan This Trip";
 
         button.addEventListener("click", function() {
+            if (!isLoggedIn()) {
+                localStorage.setItem("pendingPlanDestination", destination.name);
+                window.location.href = "/login.html";
+                return;
+            }
             const select = document.getElementById("planDestination");
             if (select) select.value = destination.name;
             document.getElementById("planner").scrollIntoView({
@@ -1317,6 +1355,18 @@ function generateItinerary() {
 
     if (!destSelect || !output) return;
 
+    if (!isLoggedIn()) {
+        output.innerHTML = `
+            <div class="planner-login-required">
+                <div class="lock-icon">🔒</div>
+                <h3>Login Required to Plan Your Trip</h3>
+                <p>Please log in or create an account to view custom day-by-day itineraries, route transit fares, and save your travel plans.</p>
+                <a href="/login.html" class="btn-login-to-plan">Sign In / Register to Plan</a>
+            </div>
+        `;
+        return;
+    }
+
     const originCity = (originInput && originInput.value.trim()) || "Visakhapatnam (Vizag)";
     const destination = destSelect.value || "Araku Valley";
     const days = parseInt(daysSelect.value) || 3;
@@ -1409,6 +1459,11 @@ function generateItinerary() {
 
 // ── Save Current Itinerary ───────────────────────────────────
 function handleSaveCurrentItinerary(dest, days, travel, hotel, food, total, origin) {
+    if (!isLoggedIn()) {
+        localStorage.setItem("pendingPlanDestination", dest);
+        window.location.href = "/login.html";
+        return;
+    }
     const originInput = document.getElementById("planOrigin");
     const originCity = origin || (originInput && originInput.value.trim()) || "Visakhapatnam";
     const saved = getSavedItinerariesList();
@@ -1552,6 +1607,23 @@ function updateSavedCount() {
 function renderSavedItineraries() {
     const listEl = document.getElementById("savedItinerariesList");
     if (!listEl) return;
+
+    if (!isLoggedIn()) {
+        listEl.innerHTML = `
+            <div class="saved-empty-state">
+                <span class="empty-icon">🔒</span>
+                <h3>Login to View Saved Itineraries</h3>
+                <p>Sign in to your account to view your saved travel plans, daily activity schedules, and budget breakdowns.</p>
+                <a href="/login.html" class="btn-plan-now">Login to View Plans</a>
+            </div>
+        `;
+        const navEl = document.getElementById("navSavedCount");
+        const secEl = document.getElementById("savedSectionCount");
+        if (navEl) navEl.textContent = "0";
+        if (secEl) secEl.textContent = "0";
+        return;
+    }
+
     const saved = getSavedItinerariesList();
 
     if (saved.length === 0) {
@@ -2043,6 +2115,10 @@ function renderHRCards(list, type) {
 let currentBookingItem = null;
 
 function openBookingModal(name, location, price, type) {
+    if (!isLoggedIn()) {
+        window.location.href = "/login.html";
+        return;
+    }
     currentBookingItem = { name, location, price, type };
     const modal = document.getElementById("bookingModal");
     const title = document.getElementById("modalTitle");
@@ -2120,6 +2196,29 @@ window.closeBookingModal = closeBookingModal;
 window.handleBookingSubmit = handleBookingSubmit;
 window.generateItinerary = generateItinerary;
 window.handleSaveCurrentItinerary = handleSaveCurrentItinerary;
+window.isLoggedIn = isLoggedIn;
+window.handlePlannerSubmit = handlePlannerSubmit;
+window.handleNavPlanTrip = handleNavPlanTrip;
+window.handleNavSavedItin = handleNavSavedItin;
+
+// Auto-resume pending plan after login
+(function checkPendingPlan() {
+    if (isLoggedIn()) {
+        const pending = localStorage.getItem("pendingPlanDestination");
+        if (pending) {
+            localStorage.removeItem("pendingPlanDestination");
+            const select = document.getElementById("planDestination");
+            if (select) {
+                select.value = pending;
+            }
+            setTimeout(() => {
+                const plannerSec = document.getElementById("planner");
+                if (plannerSec) plannerSec.scrollIntoView({ behavior: "smooth" });
+                generateItinerary();
+            }, 300);
+        }
+    }
+})();
 
 // Run initial dropdown population, count update, hotel rendering, and auto-render
 populatePlannerDropdown();

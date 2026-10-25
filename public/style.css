@@ -1303,3 +1303,48 @@ footer {
         font-size: 29px;
     }
 }
+
+
+/* ── Login Required Banner in Planner ── */
+.planner-login-required {
+    text-align: center;
+    padding: 44px 28px;
+    background: #f8fafc;
+    border: 2px dashed #94a3b8;
+    border-radius: 16px;
+    margin-top: 24px;
+}
+.planner-login-required .lock-icon {
+    font-size: 44px;
+    margin-bottom: 12px;
+}
+.planner-login-required h3 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 8px;
+}
+.planner-login-required p {
+    font-size: 15px;
+    color: #64748b;
+    max-width: 520px;
+    margin: 0 auto 22px;
+    line-height: 1.55;
+}
+.planner-login-required .btn-login-to-plan {
+    display: inline-block;
+    background: #0284c7;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 12px 30px;
+    border-radius: 10px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    transition: all 0.2s ease;
+}
+.planner-login-required .btn-login-to-plan:hover {
+    background: #0369a1;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(2, 132, 199, 0.35);
+}
