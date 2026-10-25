@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Register – Smart Travel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+
+    <div class="auth-wrapper">
+
+        <!-- Left panel -->
+        <div class="auth-left">
+            <div class="auth-left-content">
+                <div class="logo">✈️ Smart Travel</div>
+                <h1>Explore the World</h1>
+                <p>Plan your perfect trip, discover beautiful destinations, and create memories that last a lifetime.</p>
+                <div class="features">
+                    <div class="feature-item">🗺️ 18+ Destinations</div>
+                    <div class="feature-item">💰 Trip Cost Planner</div>
+                    <div class="feature-item">📌 Save Your Trips</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right panel - Auth forms -->
+        <div class="auth-right">
+            <div class="auth-card">
+
+                <!-- Tabs -->
+                <div class="auth-tabs">
+                    <button class="tab-btn active" id="loginTab" onclick="switchTab('login')">Login</button>
+                    <button class="tab-btn" id="registerTab" onclick="switchTab('register')">Register</button>
+                </div>
+
+                <!-- Login Form -->
+                <form id="loginForm" class="auth-form active" onsubmit="handleLogin(event)">
+                    <h2>Welcome Back!</h2>
+                    <p class="form-subtitle">Sign in to your account</p>
+
+                    <div class="input-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="loginPassword">Password</label>
+                        <div class="password-wrap">
+                            <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                            <button type="button" class="toggle-pw" onclick="togglePassword('loginPassword', this)">👁️</button>
+                        </div>
+                    </div>
+
+                    <div id="loginMessage" class="auth-message"></div>
+
+                    <button type="submit" class="auth-btn" id="loginBtn">
+                        <span>Login</span>
+                    </button>
+
+                    <p class="switch-text">
+                        Don't have an account?
+                        <a href="#" onclick="switchTab('register')">Register here</a>
+                    </p>
+                </form>
+
+                <!-- Register Form -->
+                <form id="registerForm" class="auth-form" onsubmit="handleRegister(event)">
+                    <h2>Create Account</h2>
+                    <p class="form-subtitle">Join Smart Travel today</p>
+
+                    <div class="input-group">
+                        <label for="regName">Full Name</label>
+                        <input type="text" id="regName" placeholder="Enter your full name" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="regEmail">Email</label>
+                        <input type="email" id="regEmail" placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="regPassword">Password</label>
+                        <div class="password-wrap">
+                            <input type="password" id="regPassword" placeholder="Min 6 characters" required>
+                            <button type="button" class="toggle-pw" onclick="togglePassword('regPassword', this)">👁️</button>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="regConfirm">Confirm Password</label>
+                        <div class="password-wrap">
+                            <input type="password" id="regConfirm" placeholder="Repeat your password" required>
+                            <button type="button" class="toggle-pw" onclick="togglePassword('regConfirm', this)">👁️</button>
+                        </div>
+                    </div>
+
+                    <div id="registerMessage" class="auth-message"></div>
+
+                    <button type="submit" class="auth-btn" id="registerBtn">
+                        <span>Create Account</span>
+                    </button>
+
+                    <p class="switch-text">
+                        Already have an account?
+                        <a href="#" onclick="switchTab('login')">Login here</a>
+                    </p>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+</body>
+</html>

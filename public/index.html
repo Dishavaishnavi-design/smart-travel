@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Travel & Tourism</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h2>✈️ Smart Travel</h2>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#destinations">Destinations</a>
+            <a href="#hotels">Hotels & Restaurants</a>
+            <a href="#planner">Plan Trip</a>
+            <a href="#savedSection">Saved Itineraries (<span id="navSavedCount">0</span>)</a>
+            <span id="welcomeMsg" class="welcome-msg"></span>
+            <a href="/login.html" id="loginLink" class="nav-auth-btn">Login</a>
+            <button id="logoutBtn" class="nav-logout-btn" onclick="logout()" style="display:none;">Logout</button>
+        </nav>
+    </header>
+
+    <section class="hero" id="home">
+        <h1>Explore the World with Smart Travel</h1>
+        <p>Discover beautiful places and plan your perfect trip.</p>
+        <a href="#destinations" class="btn">Explore Destinations</a>
+    </section>
+
+    <section class="section" id="destinations">
+        <h2>Popular Destinations</h2>
+
+        <input
+            type="text"
+            id="search"
+            placeholder="Search for a destination..."
+        >
+
+        <div class="destination-container" id="destinationList"></div>
+    </section>
+    
+    <section class="section" id="addDestinationSection" style="display:none;">
+        <h2>Add a New Destination</h2>
+
+        <form id="addDestinationForm">
+            <label for="newName">Destination Name:</label>
+            <input
+                type="text"
+                id="newName"
+                placeholder="e.g. Hyderabad"
+                required
+            >
+
+            <label for="newLocation">Location:</label>
+            <input
+                type="text"
+                id="newLocation"
+                placeholder="e.g. Telangana, India"
+                required
+            >
+
+            <label for="newDescription">Description:</label>
+            <input
+                type="text"
+                id="newDescription"
+                placeholder="e.g. Explore the city of pearls"
+            >
+
+            <button type="submit">Save Destination</button>
+        </form>
+
+        <p id="addDestinationMessage"></p>
+    </section>
+
+
+    <!-- ── Hotels & Restaurants Section (Matches Mockup) ──────── -->
+    <section class="section hr-section" id="hotels">
+        <div class="hr-header">
+            <h2 class="hr-title">Hotels & Restaurants</h2>
+            <div class="hr-tabs">
+                <button type="button" id="tabHotels" class="hr-tab-btn active" onclick="switchHRTab('hotels')">Hotels</button>
+                <button type="button" id="tabRestaurants" class="hr-tab-btn" onclick="switchHRTab('restaurants')">Restaurants</button>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="hr-search-wrap">
+            <div class="hr-search-bar">
+                <span class="hr-search-icon">🔍</span>
+                <input type="text" id="hrSearchInput" placeholder="Search hotels in your destination...">
+                <button type="button" id="hrSearchBtn" class="hr-search-submit" onclick="filterHREntries()">Search</button>
+            </div>
+        </div>
+
+        <!-- Two-column Layout: Filters & Cards -->
+        <div class="hr-layout">
+            <!-- Left: Filters Sidebar -->
+            <aside class="hr-sidebar">
+                <div class="hr-filter-group">
+                    <h4>Price Range</h4>
+                    <label class="hr-checkbox-label">
+                        <input type="checkbox" name="hrPrice" value="under1000" onchange="filterHREntries()">
+                        <span>Under ₹1,000</span>
+                    </label>
+                    <label class="hr-checkbox-label">
+                        <input type="checkbox" name="hrPrice" value="1000-2000" onchange="filterHREntries()">
+                        <span>₹1,000 - ₹2,000</span>
+                    </label>
+                    <label class="hr-checkbox-label">
+                        <input type="checkbox" name="hrPrice" value="2000-5000" onchange="filterHREntries()">
+                        <span>₹2,000 - ₹5,000</span>
+                    </label>
+                    <label class="hr-checkbox-label">
+                        <input type="checkbox" name="hrPrice" value="above5000" onchange="filterHREntries()">
+                        <span>Above ₹5,000</span>
+                    </label>
+                </div>
+
+                <div class="hr-filter-group">
+                    <h4>Ratings</h4>
+                    <label class="hr-checkbox-label">
+                        <input type="checkbox" name="hrRating" value="4" onchange="filterHREntries()">
+                        <span>4★ & above</span>
+                    </label>
+                    <label class="hr-checkbox-label">
+                        <input type="checkbox" name="hrRating" value="3" onchange="filterHREntries()">
+                        <span>3★ & above</span>
+                    </label>
+                    <label class="hr-checkbox-label">
+                        <input type="checkbox" name="hrRating" value="2" onchange="filterHREntries()">
+                        <span>2★ & above</span>
+                    </label>
+                </div>
+
+                <div class="hr-filter-group" id="amenitiesFilterGroup">
+                    <h4 id="amenitiesGroupTitle">Amenities</h4>
+                    <div id="amenitiesCheckboxes">
+                        <label class="hr-checkbox-label">
+                            <input type="checkbox" name="hrAmenity" value="wifi" onchange="filterHREntries()">
+                            <span>Free WiFi</span>
+                        </label>
+                        <label class="hr-checkbox-label">
+                            <input type="checkbox" name="hrAmenity" value="ac" onchange="filterHREntries()">
+                            <span>AC Rooms</span>
+                        </label>
+                        <label class="hr-checkbox-label">
+                            <input type="checkbox" name="hrAmenity" value="breakfast" onchange="filterHREntries()">
+                            <span>Breakfast Included</span>
+                        </label>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Right: Cards Area -->
+            <main class="hr-cards-container" id="hrCardsContainer">
+                <!-- Dynamically rendered hotel / restaurant cards -->
+            </main>
+        </div>
+    </section>
+
+
+    <!-- ── Plan Your Trip Section ────────────────────────────── -->
+    <section class="planner-section" id="planner">
+        <div class="planner-card">
+            <h2 class="planner-title">Plan Your Trip</h2>
+
+            <form id="tripPlannerForm" onsubmit="event.preventDefault(); generateItinerary();">
+                <!-- Row 1: The Travel Route (Origin to Destination) -->
+                <div class="planner-row-route">
+                    <div class="planner-field">
+                        <label for="planOrigin">📍 Starting From (Your City)</label>
+                        <input type="text" id="planOrigin" list="originCityList" placeholder="e.g. Visakhapatnam, Hyderabad, Delhi..." value="Visakhapatnam (Vizag)" required>
+                        <datalist id="originCityList">
+                            <option value="Visakhapatnam (Vizag)"></option>
+                            <option value="Hyderabad"></option>
+                            <option value="Vijayawada"></option>
+                            <option value="Tirupati"></option>
+                            <option value="Bangalore (Bengaluru)"></option>
+                            <option value="Chennai"></option>
+                            <option value="Mumbai"></option>
+                            <option value="Delhi / NCR"></option>
+                            <option value="Kolkata"></option>
+                            <option value="Pune"></option>
+                            <option value="Ahmedabad"></option>
+                            <option value="Coimbatore"></option>
+                            <option value="Kochi"></option>
+                            <option value="Bhubaneswar"></option>
+                            <option value="Jaipur"></option>
+                            <option value="Lucknow"></option>
+                        </datalist>
+                    </div>
+
+                    <div class="planner-field">
+                        <label for="planDestination">🎯 Destination (Where You Want to Go)</label>
+                        <select id="planDestination" required>
+                            <option value="">Select a Destination</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Row 2: Trip Parameters (Days, Budget, Interest) -->
+                <div class="planner-row-details">
+                    <div class="planner-field">
+                        <label for="planDays">📅 Number of Days</label>
+                        <div class="days-input-wrap">
+                            <input type="number" id="planDays" min="1" max="90" value="3" placeholder="Enter days e.g. 3, 14, 30" required>
+                        </div>
+                        <div class="quick-days-presets">
+                            <button type="button" class="preset-btn" onclick="setPlannerDays(3)">3D</button>
+                            <button type="button" class="preset-btn" onclick="setPlannerDays(5)">5D</button>
+                            <button type="button" class="preset-btn" onclick="setPlannerDays(7)">7D</button>
+                            <button type="button" class="preset-btn" onclick="setPlannerDays(10)">10D</button>
+                            <button type="button" class="preset-btn" onclick="setPlannerDays(14)">14D</button>
+                            <button type="button" class="preset-btn" onclick="setPlannerDays(21)">21D</button>
+                            <button type="button" class="preset-btn" onclick="setPlannerDays(30)">30D</button>
+                        </div>
+                    </div>
+
+                    <div class="planner-field">
+                        <label for="planBudget">💰 Budget (₹)</label>
+                        <input type="number" id="planBudget" placeholder="5000" min="0" value="5000">
+                    </div>
+
+                    <div class="planner-field">
+                        <label for="planInterest">🎨 Interest</label>
+                        <select id="planInterest">
+                            <option value="all">All Interests</option>
+                            <option value="sightseeing">Local Sightseeing & Waterfalls</option>
+                            <option value="nature">Nature & Coffee Plantations</option>
+                            <option value="adventure">Adventure & Trekking</option>
+                            <option value="heritage">Heritage & Tribal Culture</option>
+                            <option value="food">Local Food & Cuisine</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-get-itinerary" id="btnGetItinerary">Get Itinerary</button>
+            </form>
+
+            <div id="itineraryOutput" class="itinerary-output"></div>
+        </div>
+    </section>
+
+
+    <!-- ── Saved Itineraries Section (Always Visible) ────────── -->
+    <section class="section saved-section" id="savedSection">
+        <div class="saved-container">
+            <div class="saved-header">
+                <h2>📁 Saved Itineraries (<span id="savedSectionCount">0</span>)</h2>
+                <p>All your saved travel plans with day-by-day itineraries and costs. You can reload or delete them anytime.</p>
+            </div>
+
+            <div id="savedItinerariesList" class="saved-cards-container">
+                <!-- Dynamically populated saved cards or empty state -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Booking Modal (For Hotels & Restaurants) ──────────── -->
+    <div id="bookingModal" class="booking-modal" style="display:none;">
+        <div class="modal-backdrop" onclick="closeBookingModal()"></div>
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeBookingModal()">✕</button>
+            <h3 id="modalTitle">Book Now</h3>
+            <p id="modalSubtitle" class="modal-sub"></p>
+            <form id="bookingForm" onsubmit="handleBookingSubmit(event)">
+                <div class="modal-field">
+                    <label for="bookName">Your Full Name</label>
+                    <input type="text" id="bookName" placeholder="e.g. Rahul Sharma" required>
+                </div>
+                <div class="modal-field">
+                    <label for="bookPhone">Phone Number</label>
+                    <input type="tel" id="bookPhone" placeholder="e.g. 9876543210" required>
+                </div>
+                <div class="modal-row">
+                    <div class="modal-field">
+                        <label for="bookDate">Date</label>
+                        <input type="date" id="bookDate" required>
+                    </div>
+                    <div class="modal-field">
+                        <label for="bookGuests">Guests</label>
+                        <select id="bookGuests">
+                            <option value="1">1 Guest</option>
+                            <option value="2" selected>2 Guests</option>
+                            <option value="3">3 Guests</option>
+                            <option value="4">4 Guests</option>
+                            <option value="5+">5+ Guests</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="modal-submit-btn" id="modalSubmitBtn">Confirm Booking</button>
+                <div id="modalSuccessMsg" class="modal-success-msg"></div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 Smart Travel & Tourism Management System</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
