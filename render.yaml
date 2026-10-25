@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: smart-travel-tourism
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: MONGO_URI
+        value: mongodb+srv://dishavaishnavikalla_db_user:vaishu2006@cluster0.qrjsmd2.mongodb.net/smarttravel?retryWrites=true&w=majority&appName=Cluster0
+      - key: ADMIN_EMAIL
+        value: admin@smarttravel.com
+      - key: JWT_SECRET
+        value: smarttravel_production_jwt_secret_2026
